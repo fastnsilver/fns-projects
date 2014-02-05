@@ -10,3 +10,12 @@
 .classpath
 .project
 .springBeans
+
+# Maven #
+target/
+
+# GWT #
+.gwt/
+
+# Gemfire
+vf*
