@@ -1,0 +1,38 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+	<ui:with field='msg' type='io.fns.calculator.client.i18n.Messages' />
+
+	<g:DockLayoutPanel unit="EM">
+		<g:north size="5">
+			<g:FormPanel action="/submitLoan">
+				<g:HTMLPanel>
+					<g:Label text="{msg.debtor}" />
+					<g:TextBox ui:field="debtor" />
+					<g:Label text="{msg.amount}" />
+					<g:TextBox ui:field="amount" />
+					<g:Label text="{msg.interest}" />
+					<g:TextBox ui:field="interest" />
+					<g:Label text="{msg.years}" />
+					<g:TextBox ui:field="years" />
+					<g:Label text="{msg.compounded}" />
+					<g:ListBox ui:field="compounded" />
+					<g:Button text="{msg.send}" ui:field="btnSubmit" />
+				</g:HTMLPanel>
+			</g:FormPanel>
+		</g:north>
+		<g:center>
+			<g:VerticalPanel>
+				<g:Label text="${msg.payment}" />
+				<g:Label ui:field="payment" />
+				<g:FlexTable ui:field="loanResults" />
+			</g:VerticalPanel>
+		</g:center>
+		<g:south size="5">
+			<g:HTMLPanel>
+				<g:Label ui:field="error" />
+			</g:HTMLPanel>
+		</g:south>
+	</g:DockLayoutPanel>
+
+</ui:UiBinder>

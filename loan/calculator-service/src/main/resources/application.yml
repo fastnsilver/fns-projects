@@ -1,0 +1,16 @@
+# LoanService authentication credentials
+loan:
+  service:
+    user: user
+    password: password
+
+# Thymeleaf properties 
+spring:
+  thymeleaf:
+    cache: false
+
+# Spring Actuator credentials
+security:
+  user:
+    name: admin
+    password: admin

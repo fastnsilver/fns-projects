@@ -1,0 +1,12 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+	<g:DockLayoutPanel unit="EM">
+  		<g:center>
+  			<g:HTMLPanel>
+  				<g:Label ui:field="message" />
+  			</g:HTMLPanel>
+  		</g:center>
+	</g:DockLayoutPanel>
+
+</ui:UiBinder>
