@@ -1,8 +1,4 @@
-# LoanService authentication credentials
-loan:
-  service:
-    user: user
-    password: password
+# DEFAULT
 
 # Thymeleaf properties 
 spring:
@@ -14,3 +10,25 @@ security:
   user:
     name: admin
     password: admin
+
+# Overrideable port the application listens on
+server:
+  port: ${port:9000}
+
+---
+    
+# SECURE
+
+# To activate secure services
+# edit the profile declared below
+
+spring:
+  profiles: secure
+# profiles:
+#   active: secure
+    
+# LoanService authentication credentials
+loan:
+  service:
+    user: user
+    password: password

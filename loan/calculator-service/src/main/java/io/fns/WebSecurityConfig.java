@@ -17,6 +17,7 @@ package io.fns;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -32,6 +33,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @Order(Ordered.LOWEST_PRECEDENCE - 6)
+@Profile(Profiles.SECURE)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired

@@ -3,25 +3,34 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.fns</groupId>
-	<artifactId>loan-calculator-service</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
-
-	<name>loan-calculator-service</name>
-	<description>Loan Calculator REST service</description>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<!-- Spring Boot Application class -->
-		<start-class>io.fns.Application</start-class>
+	<groupId>io.fns</groupId>
+	<artifactId>loan-calculator-parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 
+	<name>loan-calculator-parent</name>
+	<description>Loan Calculator Parent POM</description>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>calculator-model</module>
+		<module>calculator-service</module>
+		<module>calculator-gwt-ui</module>
+	</modules>
+
+	<properties>
 		<!-- Global -->
 		<java.version>1.7</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- Maven -->
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 
 		<!-- Third-party library versions -->
 		<gemfire.version>7.0.1</gemfire.version>
@@ -31,24 +40,6 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>io.fns</groupId>
-			<artifactId>loan-calculator-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<!-- Gemfire -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-gemfire</artifactId>
-			<version>${spring-data-gemfire.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.gemstone.gemfire</groupId>
-			<artifactId>gemfire</artifactId>
-			<version>${gemfire.version}</version>
-		</dependency>
-
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -81,32 +72,27 @@
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
-
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<debug>true</debug>
+						<encoding>UTF-8</encoding>
+						<optimize>true</optimize>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	
 	<profiles>

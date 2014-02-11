@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-	<!-- POM file generated with GWT webAppCreator -->
 	<modelVersion>4.0.0</modelVersion>
+		
+	<!-- POM file generated with GWT webAppCreator -->
 	<groupId>io.fns</groupId>
 	<artifactId>loan-calculator-gwt-ui</artifactId>
-	<packaging>war</packaging>
 	<version>1.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<name>loan-calculator-gwt-ui</name>
 	<description>Loan Calculator GWT UI</description>
@@ -15,12 +15,13 @@
 	<properties>
 		<!-- Global -->
 		<java.version>1.7</java.version>
-		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Maven -->
-		<maven-war-plugin.version>2.4</maven-war-plugin.version>
+		<maven-clean-plugin.version>2.5</maven-clean-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<maven-war-plugin.version>2.4</maven-war-plugin.version>
 
 		<!-- Third-party library versions -->
 		<gwt.version>2.5.1</gwt.version>
@@ -89,70 +90,22 @@
 	</dependencies>
 
 	<build>
-		<!-- Generate compiled stuff in the folder used for developing mode -->
-		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-
-		<plugins>
-
-			<!-- GWT Maven Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>${gwt.version}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
-					documentation at codehaus.org -->
-				<configuration>
-					<runTarget>ui.html</runTarget>
-					<noServer>true</noServer>
-        			<extraJvmArgs>-javaagent:${lombok.lib}=ECJ</extraJvmArgs>
-					<logLevel>TRACE</logLevel>
-					<hostedWebapp>${webappDirectory}</hostedWebapp>
-					<i18nMessagesBundle>io.fns.calculator.client.i18n.Messages</i18nMessagesBundle>
-				</configuration>
-			</plugin>
-
-			<!-- Copy static web files before executing gwt:run -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war-plugin.version}</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>exploded</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<webappDirectory>${webappDirectory}</webappDirectory>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<debug>true</debug>
-					<encoding>UTF-8</encoding>
-					<optimize>true</optimize>
-					<showDeprecation>true</showDeprecation>
-					<showWarnings>true</showWarnings>
-				</configuration>
-			</plugin>
-		</plugins>
-
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven-compiler-plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<debug>true</debug>
+						<encoding>UTF-8</encoding>
+						<optimize>true</optimize>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -188,6 +141,84 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		
+		<plugins>
+			<!-- Clean generated code from gwt-maven-plugin -->
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${maven-clean-plugin.version}</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/gwt-unitCache</directory>
+						</fileset>
+						<fileset>
+							<directory>src/main/webapp/WEB-INF/deploy</directory>
+						</fileset>
+						<fileset>
+							<directory>src/main/webapp/ui</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- GWT Maven Plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt.version}</version>
+				<executions>
+					<execution>
+						<id>gwt-compile-and-run-tests</id>
+						<goals>
+							<goal>compile</goal>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
+					documentation at codehaus.org -->
+				<configuration>
+					<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+					<inplace>true</inplace>
+					<runTarget>http://localhost:8080/Application.html</runTarget>
+					<noServer>true</noServer>
+        			<extraJvmArgs>-javaagent:${lombok.lib}=ECJ</extraJvmArgs>
+					<logLevel>TRACE</logLevel>
+					<i18nMessagesBundle>io.fns.calculator.client.i18n.Messages</i18nMessagesBundle>
+					<productionMode>true</productionMode>
+					<mode>htmlunit</mode>
+					<testTimeOut>300</testTimeOut>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					<webXml>${basedir}${file.separator}src${file.separator}main${file.separator}webapp${file.separator}WEB-INF${file.separator}web.xml</webXml>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>

@@ -13,29 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns.calculator.client.view;
-
-import io.fns.calculator.client.LoanMainEventBus;
-import io.fns.calculator.model.Loan;
-import io.fns.calculator.model.LoanResult;
-
-import com.google.gwt.user.client.ui.IsWidget;
-import com.mvp4g.client.event.EventHandlerInterface;
+package io.fns;
 
 /**
  * @author Chris Phillipson
- *
+ * 
  */
-public interface LoanMainView extends IsWidget {
-	
-	public interface LoanMainPresenter extends EventHandlerInterface<LoanMainEventBus> {
-		void onInit();
-		void onStart();
-		void onHandle(Throwable caught);
-		void onSubmit(Loan loan);
-	}
-	
-	void handle(Throwable caught);
-	void prepare(LoanResult result);
-	
+public interface Profiles {
+	public static final String SECURE = "secure";
 }

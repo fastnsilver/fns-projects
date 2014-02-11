@@ -16,7 +16,6 @@
 package io.fns.calculator;
 
 import static io.fns.calculator.LoanAPI.GET_LOAN_DETAILS;
-import static io.fns.calculator.LoanAPI.LOAN_ENTRY_POINT;
 import static io.fns.calculator.LoanAPI.POST_LOAN_DETAILS;
 import io.fns.calculator.model.Loan;
 import io.fns.calculator.model.LoanResult;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping(LOAN_ENTRY_POINT)
 public class LoanRestController {
 	
 	@Autowired

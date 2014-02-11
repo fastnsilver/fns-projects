@@ -13,14 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns.calculator.client;
+package io.fns.calculator.client.service;
 
-import com.mvp4g.client.Mvp4gModule;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.i18n.client.Constants;
 
 /**
  * @author Chris Phillipson
  * 
  */
-public interface LoanMainModule extends Mvp4gModule {
+public interface LoanServiceConfig extends Constants {
 	
+	public static LoanServiceConfig INSTANCE = GWT.create(LoanServiceConfig.class);
+	
+	@DefaultStringValue("localhost")
+	String host();
+	
+	@DefaultIntValue(9000)
+	int httpPort();
 }

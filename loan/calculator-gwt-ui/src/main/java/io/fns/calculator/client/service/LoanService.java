@@ -15,7 +15,6 @@
  */
 package io.fns.calculator.client.service;
 
-import static io.fns.calculator.LoanAPI.LOAN_ENTRY_POINT;
 import static io.fns.calculator.LoanAPI.POST_LOAN_DETAILS;
 import io.fns.calculator.model.Loan;
 import io.fns.calculator.model.LoanResult;
@@ -27,29 +26,20 @@ import javax.ws.rs.PathParam;
 import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.Resource;
 import org.fusesource.restygwt.client.RestService;
-import org.fusesource.restygwt.client.RestServiceProxy;
 
-import com.google.gwt.core.client.GWT;
+import com.mvp4g.client.annotation.Service;
 
 /**
  * @author Chris Phillipson
  * 
  */
+@Service(generatedClass = LoanService.class)
 public interface LoanService extends RestService {
 	
-	public static class Util {
-		private static LoanService instance;
-		
-		public static LoanService get() {
-			if (instance == null) {
-				instance = GWT.create(LoanService.class);
-			}
-			Resource resource = new Resource(GWT.getModuleBaseURL() + LOAN_ENTRY_POINT);
-			((RestServiceProxy) instance).setResource(resource);
-			
-			return instance;
-		}
-	}
+	public static String BASE_URL = "http://" + LoanServiceConfig.INSTANCE.host() + ":"
+			+ LoanServiceConfig.INSTANCE.httpPort();
+	
+	public static Resource RESOURCE = new Resource(BASE_URL + "/");
 	
 	@POST
 	@Path("/" + POST_LOAN_DETAILS)

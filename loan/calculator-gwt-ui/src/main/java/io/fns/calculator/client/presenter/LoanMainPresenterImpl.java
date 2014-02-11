@@ -25,7 +25,9 @@ import io.fns.calculator.model.LoanResult;
 
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
+import org.fusesource.restygwt.client.RestServiceProxy;
 
+import com.google.inject.Inject;
 import com.mvp4g.client.annotation.Presenter;
 import com.mvp4g.client.presenter.BasePresenter;
 
@@ -36,9 +38,22 @@ import com.mvp4g.client.presenter.BasePresenter;
 @Presenter(view = LoanMainViewImpl.class)
 public class LoanMainPresenterImpl extends BasePresenter<LoanMainView, LoanMainEventBus> implements LoanMainPresenter {
 	
+	LoanService loanService;
+	
+	@Inject
+	public void setLoanService(LoanService loanService) {
+		this.loanService = loanService;
+		((RestServiceProxy) loanService).setResource(LoanService.RESOURCE);
+	}
+
 	@Override
 	public void onInit() {
-		
+		// do nothing
+	}
+	
+	@Override
+	public void onStart() {
+		view.prepare(null);
 	}
 	
 	@Override
@@ -48,7 +63,7 @@ public class LoanMainPresenterImpl extends BasePresenter<LoanMainView, LoanMainE
 	
 	@Override
 	public void onSubmit(Loan loan) {
-		LoanService.Util.get().calculateLoanSchedule(loan, new MethodCallback<LoanResult>() {
+		loanService.calculateLoanSchedule(loan, new MethodCallback<LoanResult>() {
 			
 			@Override
 			public void onFailure(Method method, Throwable exception) {

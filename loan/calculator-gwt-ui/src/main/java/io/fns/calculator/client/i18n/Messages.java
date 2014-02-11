@@ -44,7 +44,7 @@ public interface Messages extends ConstantsWithLookup {
 	String oops();
 	
 	String payment();
-
+	
 	String period();
 	
 	String principalAmount();

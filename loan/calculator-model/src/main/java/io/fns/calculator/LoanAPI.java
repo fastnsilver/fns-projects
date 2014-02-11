@@ -20,7 +20,6 @@ package io.fns.calculator;
  * 
  */
 public interface LoanAPI {
-	public static final String LOAN_ENTRY_POINT = "schedule";
-	public static final String GET_LOAN_DETAILS = "get/debtor/{debtor}/amount/{amount}/interest/{interest}/years/{years}/compounded/{compounded}";
-	public static final String POST_LOAN_DETAILS = "post/{loan}";
+	public static final String GET_LOAN_DETAILS = "schedule/get/debtor/{debtor}/amount/{amount}/interest/{interest}/years/{years}/compounded/{compounded}";
+	public static final String POST_LOAN_DETAILS = "schedule/post/{loan}";
 }

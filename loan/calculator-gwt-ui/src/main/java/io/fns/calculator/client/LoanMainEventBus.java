@@ -15,7 +15,6 @@
  */
 package io.fns.calculator.client;
 
-import io.fns.calculator.client.component.LoanPlaceService;
 import io.fns.calculator.client.presenter.LoanMainPresenterImpl;
 import io.fns.calculator.client.presenter.NotFoundPresenterImpl;
 import io.fns.calculator.model.Loan;
@@ -24,10 +23,9 @@ import com.mvp4g.client.annotation.Debug;
 import com.mvp4g.client.annotation.Debug.LogLevel;
 import com.mvp4g.client.annotation.Event;
 import com.mvp4g.client.annotation.Events;
-import com.mvp4g.client.annotation.Filters;
 import com.mvp4g.client.annotation.InitHistory;
 import com.mvp4g.client.annotation.NotFoundHistory;
-import com.mvp4g.client.annotation.PlaceService;
+import com.mvp4g.client.annotation.Start;
 import com.mvp4g.client.event.EventBusWithLookup;
 
 /**
@@ -35,19 +33,20 @@ import com.mvp4g.client.event.EventBusWithLookup;
  * 
  */
 @Debug(logLevel = LogLevel.DETAILED)
-@PlaceService(LoanPlaceService.class)
-@Events(module = LoanMainModule.class, startPresenter = LoanMainPresenterImpl.class, historyOnStart = true)
-@Filters(filterClasses = {}, forceFilters = true)
+@Events(startPresenter = LoanMainPresenterImpl.class)
 public interface LoanMainEventBus extends EventBusWithLookup {
 	
 	// bootstrap
-
 	@InitHistory
 	@Event(handlers = LoanMainPresenterImpl.class)
-	void init();
+	public void init();
+	
+	@Start
+	@Event(handlers = LoanMainPresenterImpl.class)
+	void start();
 	
 	// exception cases
-
+	
 	@NotFoundHistory
 	@Event(handlers = NotFoundPresenterImpl.class)
 	void show404();
@@ -56,7 +55,7 @@ public interface LoanMainEventBus extends EventBusWithLookup {
 	void handle(Throwable caught);
 	
 	// loan calculation
-
+	
 	@Event(handlers = LoanMainPresenterImpl.class)
 	void submit(Loan loan);
 	
