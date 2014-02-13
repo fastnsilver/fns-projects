@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import org.fusesource.restygwt.client.MethodCallback;
+import org.fusesource.restygwt.client.Options;
 import org.fusesource.restygwt.client.Resource;
 import org.fusesource.restygwt.client.RestService;
 
@@ -43,5 +44,6 @@ public interface LoanService extends RestService {
 	
 	@POST
 	@Path("/" + POST_LOAN_DETAILS)
+	@Options(expect = { 200, 201 })
 	public void calculateLoanSchedule(@PathParam("loan") Loan loan, MethodCallback<LoanResult> callback);
 }
