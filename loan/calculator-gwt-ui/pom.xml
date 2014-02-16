@@ -3,10 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 		
-	<!-- POM file generated with GWT webAppCreator -->
-	<groupId>io.fns</groupId>
+	<parent>
+		<groupId>io.fns</groupId>
+		<artifactId>loan-calculator-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+	
 	<artifactId>loan-calculator-gwt-ui</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>loan-calculator-gwt-ui</name>
@@ -18,15 +21,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- Maven -->
-		<maven-antrun-plugin.version>1.7</maven-antrun-plugin.version>
-		<maven-clean-plugin.version>2.5</maven-clean-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+		<maven-clean-plugin.version>2.5</maven-clean-plugin.version>
 		<maven-war-plugin.version>2.4</maven-war-plugin.version>
 
 		<!-- Third-party library versions -->
 		<gwt.version>2.6.0</gwt.version>
-		<junit.version>4.11</junit.version>
 		<lombok.version>1.12.4</lombok.version>
 		<mvp4g.version>1.5.0-SNAPSHOT</mvp4g.version>
 		<restygwt.version>1.4</restygwt.version>
@@ -89,14 +91,6 @@
 			<version>${jsr311-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!-- Test infrastructure -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -116,6 +110,7 @@
 						<showWarnings>true</showWarnings>
 					</configuration>
 				</plugin>
+				
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -153,6 +148,37 @@
 		</pluginManagement>
 		
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven-source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-javadoc-plugin</artifactId>
+        		<version>${maven-javadoc-plugin.version}</version>
+        		<executions>
+          			<execution>
+            			<id>attach-javadocs</id>
+            			<goals>
+              				<goal>jar</goal>
+            			</goals>
+          			</execution>
+        		</executions>
+        	</plugin>
+        	
 			<!-- Clean generated code from gwt-maven-plugin -->
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -174,24 +200,7 @@
 					</filesets>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
 			
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven-source-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			
 			<!-- GWT Maven Plugin -->
 			<plugin>
