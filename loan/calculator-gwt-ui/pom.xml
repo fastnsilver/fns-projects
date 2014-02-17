@@ -35,6 +35,7 @@
 		<jsr311-api.version>1.1</jsr311-api.version>
 		<validation-api.version>1.0.0.GA</validation-api.version>
 		
+		<!-- Project -->
 		<lombok.lib>${settings.localRepository}/org/projectlombok/lombok/${lombok.version}/lombok-${lombok.version}.jar</lombok.lib>
 	</properties>
 	
@@ -91,9 +92,25 @@
 			<version>${jsr311-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+      		<groupId>javax.validation</groupId>
+      		<artifactId>validation-api</artifactId>
+      		<version>${validation-api.version}</version>
+      		<scope>test</scope>
+    	</dependency>
+    	<dependency>
+      		<groupId>javax.validation</groupId>
+      		<artifactId>validation-api</artifactId>
+      		<version>${validation-api.version}</version>
+      		<classifier>sources</classifier>
+      		<scope>test</scope>
+    	</dependency>
 	</dependencies>
 
 	<build>
+		<!-- Generate compiled stuff in the folder used for developing mode -->
+    	<outputDirectory>${gwt.outputDirectory}</outputDirectory>
+	
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -108,6 +125,49 @@
 						<optimize>true</optimize>
 						<showDeprecation>true</showDeprecation>
 						<showWarnings>true</showWarnings>
+					</configuration>
+				</plugin>
+				
+				<!-- GWT Maven Plugin -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>gwt-maven-plugin</artifactId>
+					<version>${gwt.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>com.google.gwt</groupId>
+							<artifactId>gwt-user</artifactId>
+							<version>${gwt.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>com.google.gwt</groupId>
+							<artifactId>gwt-dev</artifactId>
+							<version>${gwt.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>com.google.gwt</groupId>
+							<artifactId>gwt-codeserver</artifactId>
+							<version>${gwt.version}</version>
+						</dependency>
+			        </dependencies>
+					<executions>
+						<execution>
+							<id>gwt-compile-and-run-tests</id>
+							<goals>
+								<goal>compile</goal>
+								<goal>test</goal>
+								<goal>generateAsync</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+	        			<extraJvmArgs>-javaagent:${lombok.lib}=ECJ</extraJvmArgs>
+						<logLevel>TRACE</logLevel>
+						<i18nMessagesBundle>io.fns.calculator.client.i18n.Messages</i18nMessagesBundle>
+						<productionMode>true</productionMode>
+						<mode>htmlunit</mode>
+						<testTimeOut>300</testTimeOut>
 					</configuration>
 				</plugin>
 				
@@ -178,86 +238,99 @@
           			</execution>
         		</executions>
         	</plugin>
-        	
-			<!-- Clean generated code from gwt-maven-plugin -->
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>${maven-clean-plugin.version}</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>src/main/gwt-unitCache</directory>
-						</fileset>
-						<fileset>
-							<directory>src/main/webapp/WEB-INF</directory>
-							<excludes>
-								<exclude>web.xml</exclude>
-							</excludes>
-						</fileset>
-						<fileset>
-							<directory>src/main/webapp/ui</directory>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-			
-			
-			<!-- GWT Maven Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.5.1</version>
-				<dependencies>
-					<dependency>
-						<groupId>com.google.gwt</groupId>
-						<artifactId>gwt-user</artifactId>
-						<version>${gwt.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.google.gwt</groupId>
-						<artifactId>gwt-dev</artifactId>
-						<version>${gwt.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>com.google.gwt</groupId>
-						<artifactId>gwt-codeserver</artifactId>
-						<version>${gwt.version}</version>
-					</dependency>
-		        </dependencies>
-				<executions>
-					<execution>
-						<id>gwt-compile-and-run-tests</id>
-						<goals>
-							<goal>compile</goal>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
-					documentation at codehaus.org -->
-				<configuration>
-					<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
-					<inplace>true</inplace>
-					<runTarget>http://localhost:8080/Application.html</runTarget>
-					<noServer>true</noServer>
-        			<extraJvmArgs>-javaagent:${lombok.lib}=ECJ</extraJvmArgs>
-					<logLevel>TRACE</logLevel>
-					<i18nMessagesBundle>io.fns.calculator.client.i18n.Messages</i18nMessagesBundle>
-					<productionMode>true</productionMode>
-					<mode>htmlunit</mode>
-					<testTimeOut>300</testTimeOut>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war-plugin.version}</version>
-				<configuration>
-					<webXml>${basedir}${file.separator}src${file.separator}main${file.separator}webapp${file.separator}WEB-INF${file.separator}web.xml</webXml>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>gwt-default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>	
+			<properties>
+				<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+				<gwt.outputDirectory>${webappDirectory}/WEB-INF/classes</gwt.outputDirectory>
+			</properties>
+			<build>
+    			<plugins>
+    				<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>gwt-maven-plugin</artifactId>
+						<configuration>
+							<runTarget>Application.html</runTarget>
+          					<hostedWebapp>${webappDirectory}</hostedWebapp>
+						</configuration>
+					</plugin>
+		
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>${maven-war-plugin.version}</version>
+						<executions>
+          					<execution>
+            					<phase>compile</phase>
+            					<goals>
+              						<goal>exploded</goal>
+            					</goals>
+          					</execution>
+        				</executions>
+						<configuration>
+							<webXml>${basedir}${file.separator}src${file.separator}main${file.separator}webapp${file.separator}WEB-INF${file.separator}web.xml</webXml>
+						</configuration>
+					</plugin>
+    			</plugins>
+			</build>
+		</profile>
+		
+		<profile>
+			<id>gwt-noserver</id>
+			<properties>
+				<gwt.outputDirectory>${project.build.directory}</gwt.outputDirectory>
+			</properties>
+			<build>
+				<plugins>
+					<!-- Clean generated code from gwt-maven-plugin -->
+					<plugin>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>${maven-clean-plugin.version}</version>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>src/main/gwt-unitCache</directory>
+								</fileset>
+								<fileset>
+									<directory>src/main/webapp/WEB-INF</directory>
+									<excludes>
+										<exclude>web.xml</exclude>
+									</excludes>
+								</fileset>
+								<fileset>
+									<directory>src/main/webapp/ui</directory>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>gwt-maven-plugin</artifactId>
+						<configuration>
+							<inplace>true</inplace>
+							<runTarget>http://localhost:8080/Application.html</runTarget>
+							<noServer>true</noServer>
+						</configuration>
+					</plugin>
+		
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>${maven-war-plugin.version}</version>
+						<configuration>
+							<webXml>${basedir}${file.separator}src${file.separator}main${file.separator}webapp${file.separator}WEB-INF${file.separator}web.xml</webXml>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	
 </project>

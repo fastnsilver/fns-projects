@@ -52,4 +52,13 @@ public interface Messages extends ConstantsWithLookup {
 	String send();
 	
 	String years();
+	
+	String monthly();
+	
+	String quaarterly();
+	
+	String semi_annulally();
+	
+	String annually();
+
 }
