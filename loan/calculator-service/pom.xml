@@ -153,6 +153,10 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+    		<id>spring-gemstone-releases</id>
+    		<url>http://repo.springsource.org/gemstone-release-cache/</url>
+  		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
