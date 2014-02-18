@@ -27,6 +27,8 @@ public interface Messages extends ConstantsWithLookup {
 	public static Messages INSTANCE = GWT.create(Messages.class);
 	
 	
+	String app_name();
+	
 	String amount();
 	
 	String balance();
@@ -49,16 +51,18 @@ public interface Messages extends ConstantsWithLookup {
 	
 	String principalAmount();
 	
+	String schedule();
+
 	String send();
 	
 	String years();
 	
 	String monthly();
 	
-	String quaarterly();
+	String quarterly();
 	
-	String semi_annulally();
+	String semi_annually();
 	
 	String annually();
-
+	
 }

@@ -13,14 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns.calculator;
+package io.fns.calculator.client.component;
+
+import com.google.gwt.user.client.ui.CaptionPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 
 /**
  * @author Chris Phillipson
- * 
+ *
  */
-public interface LoanAPI {
-	public static final String BASE = "/schedule/**";
-	public static final String GET_LOAN_DETAILS = "schedule/get/debtor/{debtor}/amount/{amount}/interest/{interest}/years/{years}/compounded/{compounded}";
-	public static final String POST_LOAN_DETAILS = "schedule/post/{loan}";
+public class CaptionLayoutPanel extends CaptionPanel implements RequiresResize,ProvidesResize {
+	
+	@Override
+	public void onResize() {
+		if (getContentWidget() instanceof RequiresResize) {
+			((RequiresResize) getContentWidget()).onResize();
+		}
+	}
 }

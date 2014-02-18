@@ -54,8 +54,6 @@ public class NotFoundViewImpl extends ReverseCompositeView<NotFoundPresenter> im
 	@Override
 	public void show404() {
 		message.setText(Messages.INSTANCE.oops());
-		
 	}
-	
 	
 }

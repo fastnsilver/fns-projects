@@ -15,6 +15,8 @@
  */
 package io.fns;
 
+import io.fns.calculator.LoanAPI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -33,21 +35,45 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @Order(Ordered.LOWEST_PRECEDENCE - 6)
-@Profile(Profiles.SECURE)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 	
-	@Autowired
-	private Environment env;
+	private static final String REALM = "Loan Calculator API";
 	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/schedule/**").hasRole("USER").anyRequest().authenticated();
-		http.httpBasic().realmName("Loan Calculator API");
+	@Profile(Profiles.SECURE)
+	static class SecureConfig extends WebSecurityConfigurerAdapter {
+		
+		@Autowired
+		private Environment env;
+		
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests().antMatchers(LoanAPI.BASE).hasRole("USER").anyRequest().authenticated();
+			http.httpBasic().realmName(REALM);
+		}
+		
+		@Override
+		protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
+			authManagerBuilder.inMemoryAuthentication().withUser(env.getProperty("loan.service.user"))
+					.password(env.getProperty("loan.service.password")).roles("USER");
+		}
 	}
 	
-	@Override
-	protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
-		authManagerBuilder.inMemoryAuthentication().withUser(env.getProperty("loan.service.user"))
-		.password(env.getProperty("loan.service.password")).roles("USER");
+	static class InsecureConfig extends WebSecurityConfigurerAdapter {
+		
+		@Autowired
+		private Environment env;
+		
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests().antMatchers(LoanAPI.BASE).permitAll();
+			http.httpBasic().realmName(REALM);
+		}
+		
+		@Override
+		protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
+			authManagerBuilder.inMemoryAuthentication().withUser(env.getProperty("loan.service.user"))
+					.password(env.getProperty("loan.service.password")).roles("USER");
+		}
 	}
+
 }

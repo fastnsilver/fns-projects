@@ -29,10 +29,11 @@ import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -56,7 +57,7 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 	@UiField
 	TextBox debtor, amount, interest, years;
 	
-	@UiField
+	@UiField(provided = true)
 	ListBox compounded;
 	
 	@UiField(provided = true)
@@ -71,36 +72,22 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 	public LoanMainViewImpl() {
 		initialize();
 		initWidget(binder.createAndBindUi(this));
+		debtor.setFocus(true);
+		btnSubmit.setEnabled(false);
+
 	}
 	
 	private void initialize() {
 		initializeCompoundedOptions();
-		initializeSubmitButton();
 		initializeResults();
 	}
 	
 	private void initializeCompoundedOptions() {
+		compounded = new ListBox();
 		Compounded[] list = Compounded.values();
 		for (Compounded c : list) {
 			compounded.addItem(Messages.INSTANCE.getString(c.getType()), c.name());
 		}
-	}
-	
-	private void initializeSubmitButton() {
-		btnSubmit.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				String d = debtor.getValue();
-				BigDecimal a = new BigDecimal(amount.getValue());
-				double i = Double.parseDouble(interest.getValue());
-				int y = Integer.parseInt(years.getValue());
-				Compounded c = Compounded.valueOf(compounded.getValue(compounded.getSelectedIndex()));
-				Loan l = new Loan(d, a, i, y, c);
-				getPresenter().getEventBus().submit(l);
-			}
-			
-		});
 	}
 	
 	private void initializeResults() {
@@ -111,6 +98,7 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 		loanResults.setText(0, 3, Messages.INSTANCE.cumulativeAmount());
 		loanResults.setText(0, 4, Messages.INSTANCE.balance());
 		loanResults.insertRow(1);
+		loanResults.setVisible(false);
 	}
 	
 	@Override
@@ -131,12 +119,47 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 				loanResults.setText(i, 4, fmt.format(payment.getBalance()));
 				i++;
 			}
+			loanResults.setVisible(true);
 		}
 	}
 	
 	@Override
 	public void handle(Throwable caught) {
 		error.setText(caught.getLocalizedMessage());
+	}
+	
+	@UiHandler(value = { "debtor", "amount", "interest", "years", "compounded" })
+	public void validateInput(KeyUpEvent event) {
+		String d = debtor.getValue();
+		String a = amount.getValue();
+		String i = interest.getValue();
+		String y = years.getValue();
+		String c = compounded.getValue(compounded.getSelectedIndex());
+		
+		if (isNotBlank(d) && isNotBlank(a) && isNotBlank(i) && isNotBlank(y) && isNotBlank(c)) {
+			btnSubmit.setEnabled(true);
+		} else {
+			btnSubmit.setEnabled(false);
+		}
+	}
+	
+	@UiHandler("btnSubmit")
+	public void submitLoan(ClickEvent event) {
+		String d = debtor.getValue();
+		BigDecimal a = new BigDecimal(amount.getValue());
+		double i = Double.parseDouble(interest.getValue());
+		int y = Integer.parseInt(years.getValue());
+		Compounded c = Compounded.valueOf(compounded.getValue(compounded.getSelectedIndex()));
+		Loan l = new Loan(d, a, i, y, c);
+		getPresenter().getEventBus().submit(l);
+	}
+	
+	private boolean isNotBlank(String value) {
+		boolean result = true;
+		if (value == null || value != null && value.trim().isEmpty()) {
+			result = false;
+		}
+		return result;
 	}
 	
 }
