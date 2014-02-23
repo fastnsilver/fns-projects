@@ -3,6 +3,9 @@ package io.fns.calculator.client;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fusesource.restygwt.client.Defaults;
+import org.fusesource.restygwt.client.dispatcher.FilterawareDispatcher;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.UmbrellaException;
@@ -18,17 +21,27 @@ import com.mvp4g.client.event.EventBusWithLookup;
 
 public class App implements EntryPoint {
 	
+	private final MyGinjector ginjector = GWT.create(MyGinjector.class);
+	private final Mvp4gModule mvp4gModule = GWT.create(Mvp4gModule.class);
+	
 	private Logger log = Logger.getLogger(App.class.getName());
 	
 	@Override
 	public void onModuleLoad() {
-		Mvp4gModule module = (Mvp4gModule) GWT.create(Mvp4gModule.class);
-		module.createAndStartModule();
-		RootLayoutPanel.get().add((IsWidget) module.getStartView());
+		initRestyGwt();
+		mvp4gModule.createAndStartModule();
+		RootLayoutPanel.get().add((IsWidget) mvp4gModule.getStartView());
 		
 		// See
 		// http://www.summa-tech.com/blog/2012/06/11/7-tips-for-exception-handling-in-gwt/
-		handleUncaughtClientSideExceptions(module.getEventBus());
+		handleUncaughtClientSideExceptions(mvp4gModule.getEventBus());
+	}
+	
+	private void initRestyGwt() {
+		FilterawareDispatcher filterawareDispatcher = ginjector.getFilterawareDispatcher();
+		filterawareDispatcher.addFilter(ginjector.getXSRFTokenDispatcherFilter());
+		filterawareDispatcher.addFilter(ginjector.getXSRFTokenCallbackDispatherFilter());
+		Defaults.setDispatcher(filterawareDispatcher);
 	}
 	
 	private void handleUncaughtClientSideExceptions(final EventBus eventBus) {

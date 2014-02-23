@@ -58,4 +58,12 @@
   <!-- Fallback locale -->
   <set-property-fallback name="locale" value="en" /> 
 
+  <!-- Superdev Mode Support -->
+  <add-linker name="xsiframe"/>
+
+  <set-configuration-property name="devModeRedirectEnabled" value="true"/>
+
+  <!-- Enable source maps -->
+  <set-property name="compiler.useSourceMaps" value="true" />
+
 </module>

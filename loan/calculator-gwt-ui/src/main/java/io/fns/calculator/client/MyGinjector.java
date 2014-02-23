@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns.calculator;
+package io.fns.calculator.client;
+
+import org.fusesource.restygwt.client.dispatcher.FilterawareDispatcher;
+import org.fusesource.restygwt.client.dispatcher.XSRFTokenDispatcherFilter;
+
+import com.google.gwt.inject.client.GinModules;
+import com.google.gwt.inject.client.Ginjector;
 
 /**
  * @author Chris Phillipson
  * 
  */
-public interface LoanAPI {
-	public static final String BASE = "/schedule/**";
-	public static final String GET_LOAN_DETAILS = "schedule/get/debtor/{debtor}/amount/{amount}/interest/{interest}/years/{years}/compounded/{compounded}";
-	public static final String POST_LOAN_DETAILS = "schedule/{loan}/create";
+@GinModules({ RestModule.class })
+public interface MyGinjector extends Ginjector {
+	XSRFTokenCallbackDispatcherFilter getXSRFTokenCallbackDispatherFilter();
+	XSRFTokenDispatcherFilter getXSRFTokenDispatcherFilter();
+	FilterawareDispatcher getFilterawareDispatcher();
 }

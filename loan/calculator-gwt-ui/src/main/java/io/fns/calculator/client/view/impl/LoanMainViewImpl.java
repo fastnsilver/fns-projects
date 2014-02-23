@@ -68,13 +68,13 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 	
 	@UiField
 	Label payment, error;
-	
+
 	public LoanMainViewImpl() {
 		initialize();
 		initWidget(binder.createAndBindUi(this));
 		debtor.setFocus(true);
 		btnSubmit.setEnabled(false);
-
+		
 	}
 	
 	private void initialize() {
@@ -100,7 +100,7 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 		loanResults.insertRow(1);
 		loanResults.setVisible(false);
 	}
-	
+
 	@Override
 	public void prepare(LoanResult result) {
 		int i = 1;

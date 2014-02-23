@@ -15,8 +15,10 @@ security:
 server:
   port: ${port:9000}
 
-allowed:
-  origins: http://localhost:8080, http://127.0.0.1:8888
+# CORSFilter configuration
+#cors:
+#  allowOrigin: http://localhost:8080 http://127.0.0.1:8888
+#  supportedHeaders: origin, content-type, accept, authorization, x-requested-with
   
 ---
     

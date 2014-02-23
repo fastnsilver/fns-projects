@@ -25,7 +25,6 @@ import io.fns.calculator.model.LoanResult;
 
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
-import org.fusesource.restygwt.client.RestServiceProxy;
 
 import com.google.inject.Inject;
 import com.mvp4g.client.annotation.Presenter;
@@ -39,13 +38,12 @@ import com.mvp4g.client.presenter.BasePresenter;
 public class LoanMainPresenterImpl extends BasePresenter<LoanMainView, LoanMainEventBus> implements LoanMainPresenter {
 	
 	LoanService loanService;
-	
+
 	@Inject
 	public void setLoanService(LoanService loanService) {
 		this.loanService = loanService;
-		((RestServiceProxy) loanService).setResource(LoanService.RESOURCE);
 	}
-
+	
 	@Override
 	public void onInit() {
 		// do nothing

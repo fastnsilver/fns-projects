@@ -33,7 +33,7 @@ import com.mvp4g.client.event.EventBusWithLookup;
  * 
  */
 @Debug(logLevel = LogLevel.DETAILED)
-@Events(startPresenter = LoanMainPresenterImpl.class)
+@Events(startPresenter = LoanMainPresenterImpl.class, ginModules = RestModule.class)
 public interface LoanMainEventBus extends EventBusWithLookup {
 	
 	// bootstrap

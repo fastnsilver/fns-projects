@@ -24,6 +24,7 @@
 		<java.version>1.7</java.version>
 
 		<!-- Third-party library versions -->
+		<cors-filter.version>1.9.2</cors-filter.version>
 		<gemfire.version>7.0.1</gemfire.version>
 		<snakeyaml.version>1.13</snakeyaml.version>
 		<spring-data-gemfire.version>1.3.3.RELEASE</spring-data-gemfire.version>
@@ -81,7 +82,13 @@
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
-
+		
+		<!-- CORS -->
+		<dependency>
+    		<groupId>com.thetransactioncompany</groupId>
+    		<artifactId>cors-filter</artifactId>
+    		<version>${cors-filter.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

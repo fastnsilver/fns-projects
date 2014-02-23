@@ -15,7 +15,6 @@
  */
 package io.fns.calculator.client.service;
 
-import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.Constants;
 
 /**
@@ -23,9 +22,7 @@ import com.google.gwt.i18n.client.Constants;
  * 
  */
 public interface LoanServiceConfig extends Constants {
-	
-	public static LoanServiceConfig INSTANCE = GWT.create(LoanServiceConfig.class);
-	
+
 	@DefaultStringValue("localhost")
 	String host();
 	

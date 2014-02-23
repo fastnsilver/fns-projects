@@ -25,20 +25,22 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.web.csrf.CsrfFilter;
 
 /**
  * @author Chris Phillipson
  *
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebMvcSecurity
 @Order(Ordered.LOWEST_PRECEDENCE - 6)
 public class WebSecurityConfig {
 	
 	private static final String REALM = "Loan Calculator API";
 	
+	@Configuration
 	@Profile(Profiles.SECURE)
 	static class SecureConfig extends WebSecurityConfigurerAdapter {
 		
@@ -47,6 +49,8 @@ public class WebSecurityConfig {
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
+			// http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf-configure
+			http.addFilterAfter(new CsrfTokenGeneratorFilter(), CsrfFilter.class);
 			http.authorizeRequests().antMatchers(LoanAPI.BASE).hasRole("USER").anyRequest().authenticated();
 			http.httpBasic().realmName(REALM);
 		}
@@ -54,10 +58,11 @@ public class WebSecurityConfig {
 		@Override
 		protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
 			authManagerBuilder.inMemoryAuthentication().withUser(env.getProperty("loan.service.user"))
-					.password(env.getProperty("loan.service.password")).roles("USER");
+			.password(env.getProperty("loan.service.password")).roles("USER");
 		}
 	}
 	
+	@Configuration
 	static class InsecureConfig extends WebSecurityConfigurerAdapter {
 		
 		@Autowired
@@ -65,15 +70,12 @@ public class WebSecurityConfig {
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
+			// http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf-configure
+			http.addFilterAfter(new CsrfTokenGeneratorFilter(), CsrfFilter.class);
 			http.authorizeRequests().antMatchers(LoanAPI.BASE).permitAll();
 			http.httpBasic().realmName(REALM);
 		}
 		
-		@Override
-		protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
-			authManagerBuilder.inMemoryAuthentication().withUser(env.getProperty("loan.service.user"))
-					.password(env.getProperty("loan.service.password")).roles("USER");
-		}
 	}
-
+	
 }

@@ -20,6 +20,7 @@
 						<g:Label text="{msg.compounded}" />
 						<g:ListBox ui:field="compounded" />
 						<g:Button text="{msg.send}" ui:field="btnSubmit" />
+						<g:Hidden ui:field="csrfToken" />
 					</g:HTMLPanel>
 				</g:FormPanel>
 			</c:CaptionLayoutPanel>

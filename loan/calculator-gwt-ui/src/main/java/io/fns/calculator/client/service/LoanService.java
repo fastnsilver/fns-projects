@@ -19,12 +19,14 @@ import static io.fns.calculator.LoanAPI.POST_LOAN_DETAILS;
 import io.fns.calculator.model.Loan;
 import io.fns.calculator.model.LoanResult;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.fusesource.restygwt.client.MethodCallback;
-import org.fusesource.restygwt.client.Resource;
 import org.fusesource.restygwt.client.RestService;
 
 import com.mvp4g.client.annotation.Service;
@@ -35,13 +37,10 @@ import com.mvp4g.client.annotation.Service;
  */
 @Service(generatedClass = LoanService.class)
 public interface LoanService extends RestService {
-	
-	public static String BASE_URL = "http://" + LoanServiceConfig.INSTANCE.host() + ":"
-			+ LoanServiceConfig.INSTANCE.httpPort();
-	
-	public static Resource RESOURCE = new Resource(BASE_URL + "/");
-	
+
 	@POST
 	@Path("/" + POST_LOAN_DETAILS)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public void calculateLoanSchedule(@PathParam("loan") Loan loan, MethodCallback<LoanResult> callback);
 }
