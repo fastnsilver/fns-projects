@@ -32,13 +32,13 @@ From a shell...
 	io.fns.Application
 
 ## To launch the UI
-For now, only a GWT UI variant is implemented.  The simplet way to get up-and-running from a shell is...
+For now, only a GWT UI variant is implemented.  The simplest way to get up-and-running from a shell is...
 
 	$ cd loan/calculator-gwt-ui
 	$ mvn gwt:run
 
 ## Known Issues
-Integration with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403.
+* [Integration](https://github.com/fastnsilver/fns-projects/issues/9) with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403.
 
 ## Planned UI variants
 * Vaadin
