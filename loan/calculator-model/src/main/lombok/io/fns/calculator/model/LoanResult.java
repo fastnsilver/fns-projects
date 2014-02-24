@@ -21,29 +21,38 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
 
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * @author Chris Phillipson
  *
  */
-@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LoanResult {
 	
+	@Getter
 	private String debtor;
+	@Getter
 	private BigDecimal amount;
+	@Getter
 	private double interest;
+	@Getter
 	private int years;
+	@Getter
 	private String compounded;
+	@Getter
 	private BigDecimal payment;
+	@Getter
 	private Set<Payment> paymentSchedule;
 	
-	public LoanResult() {
-		// GWT serialization requires a no-arg constructor
-	}
+	@JsonProperty
+	private final Loan loan;
 	
-	public LoanResult(Loan loan) {
+	@JsonCreator
+	public LoanResult(@JsonProperty("loan") Loan loan) {
+		this.loan = loan;
 		setLoan(loan);
 	}
 	

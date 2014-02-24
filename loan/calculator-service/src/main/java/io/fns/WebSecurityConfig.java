@@ -27,6 +27,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.csrf.CsrfFilter;
 
 /**
@@ -65,15 +66,12 @@ public class WebSecurityConfig {
 	@Configuration
 	static class InsecureConfig extends WebSecurityConfigurerAdapter {
 		
-		@Autowired
-		private Environment env;
-		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			// http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf-configure
-			http.addFilterAfter(new CsrfTokenGeneratorFilter(), CsrfFilter.class);
-			http.authorizeRequests().antMatchers(LoanAPI.BASE).permitAll();
-			http.httpBasic().realmName(REALM);
+			// https://gist.github.com/joshlong/0951f7b27749ef8c22a3
+			http.csrf().disable(); // disables the CSRF check
+			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			http.requestMatchers().and().authorizeRequests().antMatchers("/").permitAll().anyRequest().anonymous();
 		}
 		
 	}

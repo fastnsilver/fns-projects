@@ -38,7 +38,7 @@ public class Payment {
 	@JsonProperty private final BigDecimal balance;
 	
 	@JsonCreator
-	public Payment(@JsonProperty("period") int period, @JsonProperty("prinicipalAmount") BigDecimal principalAmount,
+	public Payment(@JsonProperty("period") int period, @JsonProperty("principalAmount") BigDecimal principalAmount,
 			@JsonProperty("interestAmount") BigDecimal interestAmount,
 			@JsonProperty("cumulativeAmount") BigDecimal cumulativeAmount, @JsonProperty("balance") BigDecimal balance) {
 		this.period = period;

@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,8 +46,10 @@ public class LoanRestController {
 		return loanService.calculatePaymentSchedule(debtor, amount, interest, years, compounded);
 	}
 	
-	@RequestMapping(value = POST_LOAN_DETAILS, method = RequestMethod.POST)
-	public LoanResult calculatePaymentSchedule(@PathVariable("loan") Loan loan) {
+	// thank you Gerry!
+	// http://gerrydevstory.com/2013/08/14/posting-json-to-spring-mvc-controller/
+	@RequestMapping(value = POST_LOAN_DETAILS, method = RequestMethod.POST, headers = { "Content-type=application/json" })
+	public LoanResult calculatePaymentSchedule(@RequestBody Loan loan) {
 		return loanService.calculatePaymentSchedule(loan);
 	}
 }

@@ -22,5 +22,5 @@ package io.fns.calculator;
 public interface LoanAPI {
 	public static final String BASE = "/schedule/**";
 	public static final String GET_LOAN_DETAILS = "schedule/get/debtor/{debtor}/amount/{amount}/interest/{interest}/years/{years}/compounded/{compounded}";
-	public static final String POST_LOAN_DETAILS = "schedule/{loan}/create";
+	public static final String POST_LOAN_DETAILS = "schedule/create";
 }
