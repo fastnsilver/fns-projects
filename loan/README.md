@@ -7,13 +7,26 @@ Comprised of a model, REST service, and UI variants.
 * [Java SDK 1.7.x](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
 * [Maven 3.1.x](http://maven.apache.org/download.cgi)
 
-## Server-side Technology Stack
+## Technology Stack
+
+### Shared
+* Lombok 1.12.4
+* Jackson 1.9.13
+
+### Server-side
 * Spring Framework 4.0.x.RELEASE
 * Spring Boot 1.0.0.BUILD-SNAPSHOT
 * Spring Actuator 1.0.0.BUILD-SNAPSHOT
 * Spring Security 3.2.0.RELEASE
 * [Vladimir Dzhuvinov's CORSFilter](http://software.dzhuvinov.com/cors-filter.html)
 * Gemfire 7.0.x
+
+### Client-side
+
+#### GWT
+* GWT 2.6.0
+* RestyGWT 1.4
+* MVP4G 1.5.0-SNAPSHOT
 
 ## Installation
 [Clone](https://github.com/fastnsilver/fns-projects.git) or [download](https://github.com/fastnsilver/fns-projects/archive/master.zip) fns-projects from Github.
