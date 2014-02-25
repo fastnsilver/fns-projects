@@ -76,10 +76,9 @@ Launch your favorite browser and visit
 
 You will be prompted to install the [GWT Developer Plugin](http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#launching_in_dev_mode) (if it isn't already installed).
 
-Fill in the form and click the Send button to obtain the loan schedule for your input.  The Schedule underneath the form is a [DisclosurePanel](http://www.gwtproject.org/javadoc/latest/com/google/gwt/user/client/ui/DisclosurePanel.html).
+Fill in the form and click the Send button to obtain the loan schedule for your input.  
 
 ## Known Issues
-* Loan schedule results are [clipped](https://github.com/fastnsilver/fns-projects/issues/10) when # of periods > 25.
 * [Integration](https://github.com/fastnsilver/fns-projects/issues/9) with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403 if secure profile is used.
 
 ## Planned UI variants
