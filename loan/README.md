@@ -10,23 +10,23 @@ Comprised of a model, REST service, and UI variants.
 ## Technology Stack
 
 ### Shared
-* Lombok 1.12.4
-* Jackson 1.9.13
+* [Lombok 1.12.4](http://projectlombok.org/)
+* [Jackson 1.9.13](http://jackson.codehaus.org/)
 
 ### Server-side
-* Spring Framework 4.0.x.RELEASE
-* Spring Boot 1.0.0.BUILD-SNAPSHOT
-* Spring Actuator 1.0.0.BUILD-SNAPSHOT
-* Spring Security 3.2.0.RELEASE
+* [Spring Framework 4.0.x.RELEASE](http://projects.spring.io/spring-framework/)
+* [Spring Boot 1.0.0.BUILD-SNAPSHOT](http://projects.spring.io/spring-boot/)
+* [Spring Actuator 1.0.0.BUILD-SNAPSHOT](http://projects.spring.io/spring-boot/docs/spring-boot-actuator/README.html)
+* [Spring Security 3.2.x.RELEASE](http://projects.spring.io/spring-security/)
 * [Vladimir Dzhuvinov's CORSFilter](http://software.dzhuvinov.com/cors-filter.html)
-* Gemfire 7.0.x
+* [Gemfire 7.0.x](http://www.gopivotal.com/products/pivotal-gemfire)
 
 ### Client-side
 
 #### GWT
-* GWT 2.6.0
-* RestyGWT 1.4
-* MVP4G 1.5.0-SNAPSHOT
+* [GWT SDK 2.6.0](http://www.gwtproject.org/release-notes.html#Release_Notes_2_6_0)
+* [RestyGWT 1.4](http://restygwt.fusesource.org/documentation/restygwt-user-guide.html)
+* [MVP4G 1.5.0-SNAPSHOT](https://code.google.com/p/mvp4g/)
 
 ## Installation
 [Clone](https://github.com/fastnsilver/fns-projects.git) or [download](https://github.com/fastnsilver/fns-projects/archive/master.zip) fns-projects from Github.
@@ -79,8 +79,9 @@ You will be prompted to install the [GWT Developer Plugin](http://www.gwtproject
 Fill in the form and click the Send button to obtain the loan schedule for your input.  The Schedule underneath the form is a [DisclosurePanel](http://www.gwtproject.org/javadoc/latest/com/google/gwt/user/client/ui/DisclosurePanel.html).
 
 ## Known Issues
-* [Integration](https://github.com/fastnsilver/fns-projects/issues/9) with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403.
+* Loan schedule results are [clipped](https://github.com/fastnsilver/fns-projects/issues/10) when # of periods > 25.
+* [Integration](https://github.com/fastnsilver/fns-projects/issues/9) with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403 if secure profile is used.
 
 ## Planned UI variants
-* Vaadin
-* Spring Thymeleaf.
+* [Vaadin](https://vaadin.com/home)
+* [Thymeleaf](http://www.thymeleaf.org/)
