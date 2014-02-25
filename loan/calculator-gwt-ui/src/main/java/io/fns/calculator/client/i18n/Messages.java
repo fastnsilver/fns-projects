@@ -44,12 +44,16 @@ public interface Messages extends ConstantsWithLookup {
 	
 	String oops();
 	
+	String no_results();
+	
 	String payment();
 	
 	String period();
 	
 	String principalAmount();
 	
+	String reset();
+
 	String schedule();
 	
 	String send();

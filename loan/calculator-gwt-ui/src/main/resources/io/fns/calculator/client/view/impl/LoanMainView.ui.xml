@@ -1,13 +1,14 @@
-<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-	xmlns:g='urn:import:com.google.gwt.user.client.ui'
-	xmlns:c='urn:import:io.fns.calculator.client.component'>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:c="urn:import:io.fns.calculator.client.component"
+	xmlns:v="urn:import:com.google.gwt.user.cellview.client">
 
-	<ui:with field='msg' type='io.fns.calculator.client.i18n.Messages' />
+	<ui:with field="msg" type="io.fns.calculator.client.i18n.Messages" />
 
 	<g:DockLayoutPanel unit="EM">
 		<g:north size="20">
 			<c:CaptionLayoutPanel captionText="{msg.app_name}" width="20em">
-				<g:FormPanel action="/submitLoan">
+				<g:FormPanel ui:field="form">
 					<g:HTMLPanel>
 						<g:Label text="{msg.debtor}" />
 						<g:TextBox ui:field="debtor" />
@@ -20,22 +21,28 @@
 						<g:Label text="{msg.compounded}" />
 						<g:ListBox ui:field="compounded" />
 						<g:Button text="{msg.send}" ui:field="btnSubmit" />
+						<g:Button text="{msg.reset}" ui:field="btnReset" />
 						<g:Hidden ui:field="csrfToken" />
 					</g:HTMLPanel>
 				</g:FormPanel>
 			</c:CaptionLayoutPanel>
 		</g:north>
 		<g:center>
-			<g:DisclosurePanel>
-				<g:customHeader>
-					<g:Label text="{msg.schedule}" />
-				</g:customHeader>
-				<g:VerticalPanel>
-					<g:Label text="{msg.payment}" />
-					<g:Label ui:field="payment" />
-					<g:FlexTable ui:field="loanResults" />
-				</g:VerticalPanel>
-			</g:DisclosurePanel>
+			<c:CaptionLayoutPanel captionText="{msg.schedule}" width="70em">
+				<g:DockLayoutPanel width="100%" height="100%" unit="PX">
+					<g:north size="40">
+						<g:VerticalPanel>
+							<g:Label text="{msg.payment}" />
+							<g:Label ui:field="payment" />
+						</g:VerticalPanel>
+					</g:north>
+					<!-- DataGrid. -->
+				    <g:center>
+				      <v:DataGrid width="100%"
+				        ui:field="loanResults" />
+				    </g:center>
+				</g:DockLayoutPanel>
+			</c:CaptionLayoutPanel>
 		</g:center>
 		<g:south size="5">
 			<g:HTMLPanel>

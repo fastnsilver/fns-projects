@@ -25,9 +25,14 @@ import io.fns.calculator.model.LoanResult;
 import io.fns.calculator.model.Payment;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -35,14 +40,21 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.ProvidesKey;
 
 /**
+ * Loan form
+ * 
  * @author Chris Phillipson
  * 
  */
@@ -54,32 +66,61 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 	
 	private static final LoanMainViewUiBinder binder = GWT.create(LoanMainViewUiBinder.class);
 	
+	/**
+	 * The key provider that provides the period for the payment.
+	 */
+	private static final ProvidesKey<Payment> KEY_PROVIDER = new ProvidesKey<Payment>() {
+		@Override
+		public Object getKey(Payment item) {
+			return item == null ? null : item.getPeriod();
+		}
+	};
+	
+	private ListHandler<Payment> data;
+	
+	/**
+	 * The provider that holds the list of payments from the loan schedule.
+	 */
+	private ListDataProvider<Payment> dataProvider = new ListDataProvider<Payment>();
+	
+	private Set<Column<Payment, String>> columns = new HashSet<Column<Payment, String>>();
+	
+	private static NumberFormat fmt = NumberFormat.getCurrencyFormat();
+	
+	@UiField
+	FormPanel form;
+	
 	@UiField
 	TextBox debtor, amount, interest, years;
 	
 	@UiField(provided = true)
 	ListBox compounded;
 	
+	/**
+	 * The main loanResults.
+	 */
 	@UiField(provided = true)
-	FlexTable loanResults;
+	DataGrid<Payment> loanResults;
 	
 	@UiField
 	Button btnSubmit;
 	
 	@UiField
+	Button btnReset;
+	
+	@UiField
 	Label payment, error;
-
+	
 	public LoanMainViewImpl() {
 		initialize();
 		initWidget(binder.createAndBindUi(this));
 		debtor.setFocus(true);
 		btnSubmit.setEnabled(false);
-		
 	}
 	
 	private void initialize() {
 		initializeCompoundedOptions();
-		initializeResults();
+		initializeGrid();
 	}
 	
 	private void initializeCompoundedOptions() {
@@ -90,36 +131,161 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 		}
 	}
 	
-	private void initializeResults() {
-		loanResults = new FlexTable();
-		loanResults.setText(0, 0, Messages.INSTANCE.period());
-		loanResults.setText(0, 1, Messages.INSTANCE.principalAmount());
-		loanResults.setText(0, 2, Messages.INSTANCE.interestAmount());
-		loanResults.setText(0, 3, Messages.INSTANCE.cumulativeAmount());
-		loanResults.setText(0, 4, Messages.INSTANCE.balance());
-		loanResults.insertRow(1);
-		loanResults.setVisible(false);
+	protected void initializeGrid() {
+		
+		/*
+		 * Set a key provider that provides a unique key for each payment.
+		 */
+		loanResults = new DataGrid<Payment>(KEY_PROVIDER);
+		
+		/*
+		 * Do not refresh the headers every time the data is updated. The footer
+		 * depends on the current data, so we do not disable auto refresh on the
+		 * footer.
+		 */
+		loanResults.setAutoHeaderRefreshDisabled(true);
+		
+		// Set the message to display when the table is empty.
+		loanResults.setEmptyTableWidget(new Label(Messages.INSTANCE.no_results()));
+		
+		dataProvider.addDataDisplay(loanResults);
+		
 	}
-
+	
+	protected Set<Column<Payment, String>> allColumns() {
+		return columns;
+	}
+	
+	// see
+	// http://stackoverflow.com/questions/3772480/remove-all-columns-from-a-celltable
+	// concrete classes are forced to maintain a handle on all columns added
+	protected void resetTableColumns() {
+		for (final Column<Payment, String> column : allColumns()) {
+			loanResults.removeColumn(column);
+		}
+		allColumns().clear();
+	}
+	
+	protected void seedData(Set<Payment> schedule) {
+		resetTableColumns();
+		
+		// Attach a column sort handler to the ListDataProvider to sort the
+		// list.
+		data = new ListHandler<Payment>(new ArrayList<Payment>(schedule));
+		loanResults.addColumnSortHandler(data);
+		loanResults.setRowData(data.getList());
+		
+		// Initialize the columns.
+		initTableColumns(data);
+		
+	}
+	
+	protected void initTableColumns(ListHandler<Payment> data) {
+		Column<Payment, String> period = new Column<Payment, String>(new TextCell()) {
+			@Override
+			public String getValue(Payment payment) {
+				return String.valueOf(payment.getPeriod());
+			}
+		};
+		period.setSortable(true);
+		data.setComparator(period, new Comparator<Payment>() {
+			@Override
+			public int compare(Payment o1, Payment o2) {
+				String p1 = String.valueOf(o1.getPeriod());
+				String p2 = String.valueOf(o2.getPeriod());
+				return p1.compareTo(p2);
+			}
+		});
+		loanResults.addColumn(period, Messages.INSTANCE.period());
+		loanResults.setColumnWidth(period, 20, Unit.PCT);
+		columns.add(period);
+		
+		Column<Payment, String> principalAmount = new Column<Payment, String>(new TextCell()) {
+			@Override
+			public String getValue(Payment payment) {
+				return fmt.format(payment.getPrincipalAmount());
+			}
+		};
+		principalAmount.setSortable(true);
+		data.setComparator(principalAmount, new Comparator<Payment>() {
+			@Override
+			public int compare(Payment o1, Payment o2) {
+				String p1 = fmt.format(o1.getPrincipalAmount());
+				String p2 = fmt.format(o2.getPrincipalAmount());
+				return p1.compareTo(p2);
+			}
+		});
+		loanResults.addColumn(principalAmount, Messages.INSTANCE.principalAmount());
+		loanResults.setColumnWidth(principalAmount, 20, Unit.PCT);
+		columns.add(principalAmount);
+		
+		Column<Payment, String> interestAmount = new Column<Payment, String>(new TextCell()) {
+			@Override
+			public String getValue(Payment payment) {
+				return fmt.format(payment.getInterestAmount());
+			}
+		};
+		interestAmount.setSortable(true);
+		data.setComparator(interestAmount, new Comparator<Payment>() {
+			@Override
+			public int compare(Payment o1, Payment o2) {
+				String p1 = fmt.format(o1.getInterestAmount());
+				String p2 = fmt.format(o2.getInterestAmount());
+				return p1.compareTo(p2);
+			}
+		});
+		loanResults.addColumn(interestAmount, Messages.INSTANCE.interestAmount());
+		loanResults.setColumnWidth(interestAmount, 20, Unit.PCT);
+		columns.add(interestAmount);
+		
+		Column<Payment, String> cumulativeAmount = new Column<Payment, String>(new TextCell()) {
+			@Override
+			public String getValue(Payment payment) {
+				return fmt.format(payment.getCumulativeAmount());
+			}
+		};
+		cumulativeAmount.setSortable(true);
+		data.setComparator(cumulativeAmount, new Comparator<Payment>() {
+			@Override
+			public int compare(Payment o1, Payment o2) {
+				String p1 = fmt.format(o1.getCumulativeAmount());
+				String p2 = fmt.format(o2.getCumulativeAmount());
+				return p1.compareTo(p2);
+			}
+		});
+		loanResults.addColumn(cumulativeAmount, Messages.INSTANCE.cumulativeAmount());
+		loanResults.setColumnWidth(cumulativeAmount, 20, Unit.PCT);
+		columns.add(cumulativeAmount);
+		
+		Column<Payment, String> balance = new Column<Payment, String>(new TextCell()) {
+			@Override
+			public String getValue(Payment payment) {
+				return fmt.format(payment.getBalance());
+			}
+		};
+		balance.setSortable(true);
+		data.setComparator(balance, new Comparator<Payment>() {
+			@Override
+			public int compare(Payment o1, Payment o2) {
+				String p1 = fmt.format(o1.getBalance());
+				String p2 = fmt.format(o2.getBalance());
+				return p1.compareTo(p2);
+			}
+		});
+		loanResults.addColumn(balance, Messages.INSTANCE.balance());
+		loanResults.setColumnWidth(balance, 20, Unit.PCT);
+		columns.add(balance);
+		
+	}
+	
 	@Override
 	public void prepare(LoanResult result) {
-		int i = 1;
-		NumberFormat fmt = NumberFormat.getDecimalFormat();
 		if (result != null) {
 			BigDecimal p = result.getPayment();
 			if (p != null) {
 				payment.setText(fmt.format(p));
 			}
-			Set<Payment> schedule = result.getPaymentSchedule();
-			for (Payment payment : schedule) {
-				loanResults.setText(i, 0, String.valueOf(payment.getPeriod()));
-				loanResults.setText(i, 1, fmt.format(payment.getPrincipalAmount()));
-				loanResults.setText(i, 2, fmt.format(payment.getInterestAmount()));
-				loanResults.setText(i, 3, fmt.format(payment.getCumulativeAmount()));
-				loanResults.setText(i, 4, fmt.format(payment.getBalance()));
-				i++;
-			}
-			loanResults.setVisible(true);
+			seedData(result.getPaymentSchedule());
 		}
 	}
 	
@@ -152,6 +318,14 @@ public class LoanMainViewImpl extends ReverseCompositeView<LoanMainPresenter> im
 		Compounded c = Compounded.valueOf(compounded.getValue(compounded.getSelectedIndex()));
 		Loan l = new Loan(d, a, i, y, c);
 		getPresenter().getEventBus().submit(l);
+	}
+	
+	@UiHandler("btnReset")
+	public void resetLoan(ClickEvent event) {
+		form.reset();
+		btnSubmit.setEnabled(false);
+		payment.setText(null);
+		resetTableColumns();
 	}
 	
 	private boolean isNotBlank(String value) {
