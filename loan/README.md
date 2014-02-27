@@ -82,5 +82,6 @@ Fill in the form and click the Send button to obtain the loan schedule for your 
 * [Integration](https://github.com/fastnsilver/fns-projects/issues/9) with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403 if secure profile is used.
 
 ## Planned UI variants
-* [Vaadin](https://vaadin.com/home)
-* [Thymeleaf](http://www.thymeleaf.org/)
+* [Sencha GXT 3.0.x](http://www.sencha.com/products/gxt/)
+* [Vaadin 7.1.x](https://vaadin.com/home)
+* [Thymeleaf 2.1.x](http://www.thymeleaf.org/)
