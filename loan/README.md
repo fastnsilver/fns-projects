@@ -38,7 +38,7 @@ Comprised of a model, REST service, and UI variants.
 From a shell...
 
 	$ cd loan/calculator-service/target
-	$ java -jar loan-calculator-service-1.0.0-SNAPSHOT.jar
+	$ java -jar loan-calculator-service-1.0.0-SNAPSHOT.war
 
 ... or if using Eclipse IDE with Spring plugin, configure a Spring Boot launch item for the loan-calculator-service targeting
 
@@ -77,6 +77,14 @@ Launch your favorite browser and visit
 You will be prompted to install the [GWT Developer Plugin](http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#launching_in_dev_mode) (if it isn't already installed).
 
 Fill in the form and click the Send button to obtain the loan schedule for your input.  
+
+## Coming Soon
+Wildfly 8 support!
+
+Eventually service and UI projects can alternatively be started with (thanks to the cargo-maven2-plugin):
+	
+	$ mvn clean install -Dsetup
+	$ mvn cargo:run -Pcargo-wildfly
 
 ## Known Issues
 * [Integration](https://github.com/fastnsilver/fns-projects/issues/9) with Spring's [CsrfFilter](http://docs.spring.io/spring-security/site/docs/3.2.1.CI-SNAPSHOT/apidocs/org/springframework/security/web/csrf/CsrfFilter.html) is incomplete.  GWT UI will return a 403 if secure profile is used.
