@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns.calculator;
+package io.fns.calculator.service;
 
 import static io.fns.calculator.LoanAPI.GET_LOAN_DETAILS;
 import static io.fns.calculator.LoanAPI.POST_LOAN_DETAILS;
@@ -30,8 +30,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * A <a
+ * href="http://www.corej2eepatterns.com/Patterns2ndEd/FrontController.htm">
+ * front-controller</a> for serving JSON responses to loan calculation requests.
+ * 
+ * @see LoanService
  * @author Chris Phillipson
- *
+ * 
  */
 @RestController
 public class LoanRestController {

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns;
+package io.fns.calculator.config;
 
 import io.fns.calculator.LoanAPI;
+import io.fns.calculator.filter.CsrfTokenGeneratorFilter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

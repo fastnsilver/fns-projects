@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.fns;
+package io.fns.calculator.config;
 
+
+import io.fns.calculator.filter.CORSFilter;
 
 import java.io.IOException;
 import java.util.Properties;

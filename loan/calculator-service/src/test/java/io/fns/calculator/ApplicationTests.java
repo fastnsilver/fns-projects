@@ -1,4 +1,6 @@
-package io.fns;
+package io.fns.calculator;
+
+import io.fns.calculator.Application;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
