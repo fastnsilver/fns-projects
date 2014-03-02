@@ -21,4 +21,5 @@ package io.fns;
  */
 public interface Profiles {
 	public static final String SECURE = "secure";
+	public static final String GEMFIRE = "gemfire";
 }

@@ -15,11 +15,22 @@ security:
 server:
   port: ${port:9000}
 
+# EhCache configuration
+ehcache:
+  maxEntriesLocalHeap: 1000
+
 # CORSFilter configuration
 #cors:
 #  allowOrigin: http://localhost:8080 http://127.0.0.1:8888
 #  supportedHeaders: origin, content-type, accept, authorization, x-requested-with
-  
+ 
+---
+
+# GEMFIRE
+
+spring:
+  profiles: gemfire
+   
 ---
     
 # SECURE
@@ -37,3 +48,4 @@ loan:
   service:
     user: user
     password: password
+    

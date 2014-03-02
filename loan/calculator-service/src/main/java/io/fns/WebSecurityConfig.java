@@ -17,12 +17,11 @@ package io.fns;
 
 import io.fns.calculator.LoanAPI;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -45,8 +44,11 @@ public class WebSecurityConfig {
 	@Profile(Profiles.SECURE)
 	static class SecureConfig extends WebSecurityConfigurerAdapter {
 		
-		@Autowired
-		private Environment env;
+		@Value("${loan.service.user}")
+		private String user;
+		
+		@Value("${loan.service.password}")
+		private String password;
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
@@ -58,8 +60,8 @@ public class WebSecurityConfig {
 		
 		@Override
 		protected void configure(AuthenticationManagerBuilder authManagerBuilder) throws Exception {
-			authManagerBuilder.inMemoryAuthentication().withUser(env.getProperty("loan.service.user"))
-			.password(env.getProperty("loan.service.password")).roles("USER");
+			authManagerBuilder.inMemoryAuthentication().withUser(user)
+			.password(password).roles("USER");
 		}
 	}
 	

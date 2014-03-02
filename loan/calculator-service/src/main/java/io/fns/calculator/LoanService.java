@@ -15,6 +15,7 @@
  */
 package io.fns.calculator;
 
+import static io.fns.CacheConfig.LOAN_SCHEDULE_CACHE;
 import io.fns.calculator.model.Compounded;
 import io.fns.calculator.model.Loan;
 import io.fns.calculator.model.LoanResult;
@@ -40,7 +41,7 @@ public class LoanService {
 		return loan;
 	}
 	
-	@Cacheable("loans")
+	@Cacheable(LOAN_SCHEDULE_CACHE)
 	public LoanResult calculatePaymentSchedule(String debtor, BigDecimal amount, double interest, int years,
 			String compounded) {
 		Loan loan = createLoan(debtor, amount, interest, years, compounded);
@@ -48,7 +49,7 @@ public class LoanService {
 		return result;
 	}
 	
-	@Cacheable("loans")
+	@Cacheable(LOAN_SCHEDULE_CACHE)
 	public LoanResult calculatePaymentSchedule(Loan loan) {
 		LoanResult result = new LoanResult(loan);
 		return result;
