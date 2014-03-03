@@ -332,7 +332,7 @@
 				<repository>
 					<id>in-project</id>
 					<name>In Project Repo</name>
-					<url>file://${project.basedir}/lib</url>
+					<url>${project.basedir}/lib</url>
 				</repository>
     		</repositories>
     	</profile>
