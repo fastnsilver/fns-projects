@@ -15,7 +15,7 @@
 		<module>calculator-model</module>
 		<module>calculator-service</module>
 		<module>calculator-gwt-ui</module>
-		<module>calculator-vaadin</module>
+		<!-- <module>calculator-vaadin</module> -->
 	</modules>
 
 	<properties>
