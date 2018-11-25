@@ -39,7 +39,7 @@
 		<ehcache.version>2.8.1</ehcache.version>
 		<gemfire.version>7.0.1</gemfire.version>
 		<snakeyaml.version>1.13</snakeyaml.version>
-		<spring-data-gemfire.version>1.3.3.RELEASE</spring-data-gemfire.version>
+		<spring-data-gemfire.version>1.5.0.RELEASE</spring-data-gemfire.version>
 	</properties>
 
 	<dependencies>
