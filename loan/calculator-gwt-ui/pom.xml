@@ -28,7 +28,7 @@
 		<maven-war-plugin.version>2.4</maven-war-plugin.version>
 
 		<!-- Third-party library versions -->
-		<gwt.version>2.6.0</gwt.version>
+		<gwt.version>2.7.0</gwt.version>
 		<lombok.version>1.12.4</lombok.version>
 		<mvp4g.version>1.5.0-SNAPSHOT</mvp4g.version>
 		<restygwt.version>1.4</restygwt.version>
@@ -197,7 +197,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
